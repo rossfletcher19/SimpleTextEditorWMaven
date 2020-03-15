@@ -36,7 +36,9 @@
 ## UX/UI
   * Develop custom style
 
-## Polish
+## Polish and To Do
+  * Implement LanguageTool for spellchecking
+  * Better way to distribute JAR
   * Refactor
   * Delete unused
   * Make README awesome
