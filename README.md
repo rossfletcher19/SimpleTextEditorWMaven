@@ -2,7 +2,7 @@
 
 #### _A simple text editor I created that will auto save text files. In my work I found myself having to type out longer analytical comments and I was afraid of losing my work at times. I used notepad for a bit but thought this would make a fun project. The main feature is auto saving txt files._
 
-#### By _**Ross Fletcher 2/2020**_
+#### By _**Ross Fletcher 3/2020**_
 
 ## Features
   * Runs on Windows PC and Mac.
@@ -47,14 +47,19 @@ _none currently_
 
 ## Support and contact details
 
-_Contact Ross Fletcher @ rtbfletch at outlook dot com, with any questions or input and thank you!_
+_Contact superSimpleEditor @ gmail dot com, with any questions or input and thank you!_
 
 ## Technologies Used
 
 * _NetBeans_
 * _JavaFX_
 * _FXML_
+* _Maven_
 * _Git and GitHub_
+
+## Build Info
+
+* _Build Version 3.0 using javafx and maven with the intent of implementing LanguageTool for spellchecking._
 
 ### License
 
