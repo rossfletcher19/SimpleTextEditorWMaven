@@ -1,2 +1,3 @@
 com\mycompany\maventexteditor\MainApp.class
+com\mycompany\maventexteditor\controllers\HowtoFXMLController.class
 com\mycompany\maventexteditor\FXMLController.class

@@ -12,9 +12,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
 
@@ -69,6 +74,36 @@ public class FXMLController implements Initializable {
 
             Save(textArea.getText().replaceAll("\n", System.getProperty("line.separator")), file);
         } 
+    }
+    
+    @FXML
+    private void howToPopup(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/howtoFXML.fxml"));
+        final Stage dialog = new Stage();
+        dialog.getIcons().add(new Image("/images/pencil.png"));
+        dialog.setTitle("Super Simple Editor - How To");
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        Scene dialogScene = new Scene(root);
+        dialog.setScene(dialogScene);
+        dialog.show();
+    }
+    
+    @FXML
+    private void aboutpopup(ActionEvent event){
+        final Stage dialog = new Stage();
+        dialog.getIcons().add(new Image("/images/pencil.png"));
+        dialog.setTitle("Super Simple Editor");
+        TextArea aboutTextArea = new TextArea();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(primaryStage);
+        aboutTextArea.setWrapText(true);
+        aboutTextArea.setEditable(false);
+        aboutTextArea.setText("This editor was created to use with notation formatting languages like Jira's Text Formatting Notation or simple note taking and writing for all of your thoughts. Contact rtbfletch at outlook dot com with any quetions or input. ");
+        Scene dialogScene = new Scene(aboutTextArea, 300, 200);
+        dialog.setScene(dialogScene);
+        dialog.show();
+           
     }
     
     @Override
