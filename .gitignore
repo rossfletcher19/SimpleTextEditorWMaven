@@ -2,6 +2,7 @@
 nbproject/private/
 build/
 nbbuild/
+target/
 dist/
 nbdist/
 nbactions.xml
