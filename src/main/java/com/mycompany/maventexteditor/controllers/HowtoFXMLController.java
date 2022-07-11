@@ -29,7 +29,7 @@ public class HowtoFXMLController implements Initializable {
     private void linkToReadMe(ActionEvent event) throws IOException, URISyntaxException{
       
       if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-    Desktop.getDesktop().browse(new URI(""));
+    Desktop.getDesktop().browse(new URI("https://github.com/rossfletcher19/SimpleTextEditorWMaven"));
         }
         
     }

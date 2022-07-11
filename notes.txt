@@ -1,0 +1,17 @@
+Users will be typing and KeyPressedTime and keyReleasedTime will be close together. When the user stops typing
+- Get users keyReleasedTime and keyPressTime when they stop typing
+- In another thread check differences in keyReleasedTime and keyPressedTime with SystemCurrentTimeMillis. allow thread to be checking KeyReleasedTime and keyPressedTime
+- 
+
+Timeline fiveSecondsWonder = new Timeline(
+                 new KeyFrame(Duration.seconds(5), 
+                 new EventHandler<ActionEvent>() {
+
+    @Override
+    public void handle(ActionEvent event) {
+        System.out.println("this is called every 5 seconds on UI thread");
+    }
+}));
+fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+fiveSecondsWonder.play();
+

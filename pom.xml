@@ -6,6 +6,7 @@
     <artifactId>MavenTextEditor</artifactId>
     <version>1</version>
     <packaging>jar</packaging>
+    
 
     <name>MavenTextEditor</name>
 
@@ -18,7 +19,7 @@
         <!-- Used as the 'Vendor' for JNLP generation -->
         <name>Your Organisation</name>
     </organization>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -103,6 +104,22 @@
                 </configuration>
             </plugin>
         </plugins>
+        
+        
+            
+        
     </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.languagetool</groupId>
+            <artifactId>language-en</artifactId>
+            <version>4.8</version>
+        </dependency>
+    </dependencies>
+    
+           
+      
+    
 
 </project>

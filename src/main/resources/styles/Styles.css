@@ -1,3 +1,13 @@
 .button {
     -fx-font-weight: bold;
 }
+
+#spellcheckTextArea {
+    height: 0px;
+}
+
+#textAreaFileFolderName {
+   
+}
+
+

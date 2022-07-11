@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,18 +20,43 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.JFileChooser;
+import org.languagetool.JLanguageTool;
+import org.languagetool.language.BritishEnglish;
+import org.languagetool.rules.RuleMatch;
 
 public class FXMLController implements Initializable {
+    
     private Stage primaryStage;
     String opSystem = new String();
     String documentsPath = new JFileChooser().getFileSystemView().getDefaultDirectory().toString();
     @FXML public TextArea textArea;
+    @FXML public TextArea spellcheckTextArea;
+    @FXML public TextField textFieldFileFolderName;
     private final TextArea textArea2 = new TextArea();
+    public static volatile int keyPressTime = 00;
+    public static volatile int keyReleaseTime = 00;
+    JLanguageTool langTool = new JLanguageTool(new BritishEnglish());
+    
+
+    @FXML
+    private void handleKeyPressed() throws IOException {
+        keyPressTime = (int) System.currentTimeMillis();
+        System.out.println(keyPressTime + "keyPressTime");
+    }
+    
+    @FXML
+    private void handleKeyReleased() throws IOException{
+        keyReleaseTime = (int) System.currentTimeMillis();
+        System.out.println(keyReleaseTime + "keyReleaseTime");
+        
+    }
+    
     
     private void createOpeningFolder(){
         
@@ -79,7 +105,7 @@ public class FXMLController implements Initializable {
     }
     
     @FXML
-    private void howToPopup(ActionEvent event) throws IOException{
+    private void howToPopup(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/howtoFXML.fxml"));
         final Stage dialog = new Stage();
         dialog.getIcons().add(new Image("/images/pencil.png"));
@@ -123,8 +149,7 @@ public class FXMLController implements Initializable {
                 TimerTask task = new AutoSave();
                 timer.schedule(task, 2000, 60000);
             }
-    
-    
+
     }
     
     @Override
@@ -133,10 +158,12 @@ public class FXMLController implements Initializable {
         String osName = System.getProperty("os.name").toLowerCase();
         this.opSystem = osName;
         System.out.println("Operating System: "   + this.opSystem);
+        textFieldFileFolderName.setFocusTraversable(true);
         textArea.setWrapText(true);
         createOpeningFolder();
         runAutoSave();
-    } 
+        
+    }
     
     class AutoSave extends TimerTask {
       
@@ -147,9 +174,10 @@ public class FXMLController implements Initializable {
                 // do nothing
             } else {
                 // autosave new folder and file if needed
-                String[] firstLineOfTextArea = textArea.getText().split("\\n");
-                String[] folderAndFileName = firstLineOfTextArea[0].split("-", 2);
-                Path path = Paths.get(documentsPath + "\\ssef\\" + folderAndFileName[0]);
+//                String[] firstLineOfTextArea = textArea.getText().split("\\n");
+                    String[] firstLineOfTextArea = textFieldFileFolderName.getText().split("\\n");
+                    String[] folderAndFileName = firstLineOfTextArea[0].split("-", 2);
+                    Path path = Paths.get(documentsPath + "\\ssef\\" + folderAndFileName[0]);
                 if (Files.exists(path)) {
                     // Do nothing
                 } else {
@@ -158,6 +186,28 @@ public class FXMLController implements Initializable {
                 File file = new File(String.format(documentsPath + "\\ssef\\" + folderAndFileName[0]+ "\\%s.txt", folderAndFileName[1] ));
                 Save(textArea.getText().replaceAll("\n", System.getProperty("line.separator")), file);
                 textArea2.setText(textArea.getText());
+                
+//                spell check
+                List<RuleMatch> matches = null;
+                        try {
+                            matches = langTool.check(textArea.getText());
+                            System.out.println(matches);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        if (matches.isEmpty() == true) { 
+                            spellcheckTextArea.clear();
+                        }
+                            
+                            for (RuleMatch match : matches) {
+                            spellcheckTextArea.setText(spellcheckTextArea.getText() + "\n" + "Potential error at characters " + match.getFromPos() + "-" + match.getToPos() + ": " + match.getMessage() + "\n" + "Suggested correction(s): " + match.getSuggestedReplacements());
+
+                            System.out.println("Potential error at characters " + match.getFromPos() + "-" + match.getToPos() + ": " + match.getMessage());
+                            System.out.println("Suggested correction(s): " + match.getSuggestedReplacements());
+                            }
+                        
+                    
             
             }
         } 
@@ -172,7 +222,7 @@ public class FXMLController implements Initializable {
                 // do nothing
             } else {
                 // autosave new folder and file if needed
-                String[] firstLineOfTextArea = textArea.getText().split(System.getProperty("line.separator"));
+                String[] firstLineOfTextArea = textFieldFileFolderName.getText().split(System.getProperty("line.separator"));
                 System.out.println(firstLineOfTextArea[0] + " first line of textarea");
                 String[] folderAndFileName = firstLineOfTextArea[0].split("-", 2);
                 Path path = Paths.get(documentsPath + "/Documents" + "/ssef/" + folderAndFileName[0]);
@@ -185,8 +235,30 @@ public class FXMLController implements Initializable {
                 File file = new File(documentsPath + "/Documents" + "/ssef/" + folderAndFileName[0] + "/" + folderAndFileName[1]+ ".txt" );
                 Save(textArea.getText().replaceAll("/n", System.getProperty("line.separator")), file);
                 textArea2.setText(textArea.getText());
+                
+                List<RuleMatch> matches = null;
+                        try {
+                            matches = langTool.check(textArea.getText());
+                            System.out.println(matches);
+                        } catch (IOException ex) {
+                            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        if (matches.isEmpty() == true) { 
+                            spellcheckTextArea.clear();
+                        }
+                            
+                            for (RuleMatch match : matches) {
+                            spellcheckTextArea.setText(spellcheckTextArea.getText() + "\n" + "Potential error at characters " + match.getFromPos() + "-" + match.getToPos() + ": " + match.getMessage() + "\n" + "Suggested correction(s): " + match.getSuggestedReplacements());
+
+                            System.out.println("Potential error at characters " + match.getFromPos() + "-" + match.getToPos() + ": " + match.getMessage());
+                            System.out.println("Suggested correction(s): " + match.getSuggestedReplacements());
+                            }
             
             }
         } 
-    } 
+    }
+    
+    
+    
 }
